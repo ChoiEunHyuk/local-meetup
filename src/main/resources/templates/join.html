@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - 동네 소모임</title>
+    <link rel="stylesheet" th:href="@{/css/join.css}">
+</head>
+<body>
+    <div class="join-container">
+        <div class="logo-section">
+            <div class="logo-icon">🏘️</div>
+            <h1>회원가입</h1>
+            <p>동네 소모임과 함께 새로운 인연을 만나보세요</p>
+        </div>
+
+        <form id="joinForm">
+            <!-- 이메일 -->
+            <div class="form-group">
+                <label for="email">
+                    이메일<span class="required">*</span>
+                </label>
+                <div class="input-wrapper">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="example@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                    <div class="error-message" id="emailError">올바른 이메일 주소를 입력해주세요</div>
+                </div>
+            </div>
+
+            <!-- 비밀번호 -->
+            <div class="form-group">
+                <label for="password">
+                    비밀번호<span class="required">*</span>
+                </label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="비밀번호를 입력하세요"
+                        required
+                        autocomplete="new-password"
+                    >
+                    <button type="button" class="password-toggle" id="togglePassword">
+                        👁️
+                    </button>
+                </div>
+                <div class="error-message" id="passwordError">비밀번호는 최소 8자 이상이어야 합니다</div>
+                <div class="password-strength">
+                    <div class="strength-bar">
+                        <div class="strength-fill"></div>
+                    </div>
+                    <span class="strength-text"></span>
+                </div>
+                <div class="help-text">영문, 숫자, 특수문자를 포함하여 8자 이상 입력하세요</div>
+            </div>
+
+            <!-- 비밀번호 확인 -->
+            <div class="form-group">
+                <label for="passwordConfirm">
+                    비밀번호 확인<span class="required">*</span>
+                </label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="passwordConfirm"
+                        name="passwordConfirm"
+                        class="form-control"
+                        placeholder="비밀번호를 다시 입력하세요"
+                        required
+                        autocomplete="new-password"
+                    >
+                    <button type="button" class="password-toggle" id="togglePasswordConfirm">
+                        👁️
+                    </button>
+                </div>
+                <div class="error-message" id="passwordConfirmError">비밀번호가 일치하지 않습니다</div>
+                <div class="success-message" id="passwordConfirmSuccess">비밀번호가 일치합니다</div>
+            </div>
+
+            <!-- 닉네임 -->
+            <div class="form-group">
+                <label for="nickname">
+                    닉네임<span class="required">*</span>
+                </label>
+                <div class="input-wrapper">
+                    <input
+                        type="text"
+                        id="nickname"
+                        name="nickname"
+                        class="form-control"
+                        placeholder="닉네임을 입력하세요"
+                        required
+                        maxlength="20"
+                    >
+                    <div class="error-message" id="nicknameError">닉네임은 최소 2자 이상이어야 합니다</div>
+                    <div class="help-text">2~20자 이내로 입력하세요</div>
+                </div>
+            </div>
+
+            <!-- 거주 지역 -->
+            <div class="form-group">
+                <label for="region">거주 지역</label>
+                <div class="input-wrapper">
+                    <input
+                        type="text"
+                        id="region"
+                        name="region"
+                        class="form-control"
+                        placeholder="예: 서울 강남구"
+                    >
+                    <div class="help-text">소모임 추천을 위해 거주 지역을 입력해주세요 (선택사항)</div>
+                </div>
+            </div>
+
+            <!-- 약관 동의 -->
+            <div class="terms-group">
+                <div class="terms-item all">
+                    <input type="checkbox" id="agreeAll">
+                    <label for="agreeAll">전체 약관에 동의합니다</label>
+                </div>
+                <div class="terms-item">
+                    <input type="checkbox" id="agreeTerms" required>
+                    <label for="agreeTerms">
+                        (필수) 이용약관 동의
+                        <a href="#" class="terms-link" onclick="event.preventDefault();">보기</a>
+                    </label>
+                </div>
+                <div class="terms-item">
+                    <input type="checkbox" id="agreePrivacy" required>
+                    <label for="agreePrivacy">
+                        (필수) 개인정보 처리방침 동의
+                        <a href="#" class="terms-link" onclick="event.preventDefault();">보기</a>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 회원가입 버튼 -->
+            <button type="submit" class="btn btn-primary" id="joinBtn">
+                회원가입
+            </button>
+            <div class="loading" id="loading"></div>
+
+            <!-- 로그인 페이지로 돌아가기 -->
+            <div class="back-to-login">
+                이미 계정이 있으신가요? <a href="/login.do">로그인</a>
+            </div>
+        </form>
+    </div>
+
+    <script th:src="@{/js/join.js}"></script>
+</body>
+</html>

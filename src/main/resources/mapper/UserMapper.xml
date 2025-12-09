@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.local_meetup.mapper.UserMapper">
+
+    <!-- User 결과 매핑 -->
+    <resultMap id="UserResultMap" type="com.example.local_meetup.domain.User">
+        <id property="userId" column="USER_ID"/>
+        <result property="email" column="EMAIL"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="nickname" column="NICKNAME"/>
+        <result property="region" column="REGION"/>
+        <result property="createdDt" column="CREATED_DT"/>
+    </resultMap>
+
+    <!-- 사용자 정보 등록 -->
+    <insert id="insertUser" parameterType="com.example.local_meetup.domain.User">
+        INSERT INTO LOCALMEET.USERS (
+            EMAIL,
+            PASSWORD,
+            NICKNAME,
+            REGION,
+            CREATED_DT
+        ) VALUES (
+            #{email},
+            #{password},
+            #{nickname},
+            #{region},
+            SYSDATE
+        )
+    </insert>
+
+    <!-- 이메일로 사용자 조회 (중복 체크용) -->
+    <select id="selectUserByEmail" parameterType="string" resultMap="UserResultMap">
+        SELECT
+            EMAIL,
+            PASSWORD,
+            NICKNAME,
+            REGION,
+            CREATED_DT
+        FROM LOCALMEET.USERS
+        WHERE EMAIL = #{email}
+    </select>
+
+</mapper>

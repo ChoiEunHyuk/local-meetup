@@ -1,10 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - 동네 소모임</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 <body>
-    <p>test</p>
+    <div class="login-container">
+        <div class="logo-section">
+            <div class="logo-icon">🏘️</div>
+            <h1>동네 소모임</h1>
+            <p>우리 동네에서 새로운 친구를 만나보세요</p>
+        </div>
+
+        <form id="loginForm" action="/login.do" method="post">
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <div class="input-wrapper">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="example@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                    <div class="error-message" id="emailError">올바른 이메일 주소를 입력해주세요</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="비밀번호를 입력하세요"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <button type="button" class="password-toggle" id="togglePassword">
+                        👁️
+                    </button>
+                    <div class="error-message" id="passwordError">비밀번호를 입력해주세요</div>
+                </div>
+            </div>
+
+            <div class="remember-forgot">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember" id="remember">
+                    <span>로그인 상태 유지</span>
+                </label>
+                <a href="#" class="forgot-password">비밀번호 찾기</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="loginBtn">
+                로그인
+            </button>
+            <div class="loading" id="loading"></div>
+
+            <div class="divider">
+                <span>또는</span>
+            </div>
+
+            <button type="button" class="btn btn-secondary" onclick="location.href='/register.do'">
+                회원가입
+            </button>
+        </form>
+    </div>
+
+    <script th:src="@{/js/login.js}"></script>
 </body>
 </html>
