@@ -4,6 +4,7 @@ import com.example.local_meetup.domain.User;
 import com.example.local_meetup.mapper.UserMapper;
 import com.example.local_meetup.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper) {
+    public UserServiceImpl(UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -26,9 +29,10 @@ public class UserServiceImpl implements UserService {
                 return false;
             }
 
-            // 비밀번호 암호화는 추후 BCrypt 적용 예정
-            // String encodedPassword = passwordEncoder.encode(user.getPassword());
-            // user.setPassword(encodedPassword);
+            // BCrypt를 사용한 비밀번호 암호화
+            // BCrypt는 자체적으로 랜덤 salt를 생성하고 관리합니다
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
 
             // 사용자 등록
             int result = userMapper.insertUser(user);
@@ -44,6 +48,34 @@ public class UserServiceImpl implements UserService {
     public boolean isEmailDuplicate(String email) {
         User existingUser = userMapper.selectUserByEmail(email);
         return existingUser != null;
+    }
+
+    @Override
+    public User authenticateUser(String email, String rawPassword) {
+        try {
+            // 이메일로 사용자 조회
+            User user = userMapper.selectUserByEmail(email);
+
+            // 사용자가 존재하지 않으면 null 반환
+            if (user == null) {
+                return null;
+            }
+
+            // BCrypt로 비밀번호 검증
+            // passwordEncoder.matches()는 rawPassword를 암호화하여 저장된 해시와 비교합니다
+            boolean isPasswordMatch = passwordEncoder.matches(rawPassword, user.getPassword());
+
+            // 비밀번호가 일치하면 사용자 정보 반환, 일치하지 않으면 null 반환
+            if (isPasswordMatch) {
+                return user;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

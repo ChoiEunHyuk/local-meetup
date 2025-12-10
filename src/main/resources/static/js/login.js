@@ -4,23 +4,14 @@
  */
 
 // DOM이 완전히 로드된 후 실행
-document.addEventListener('DOMContentLoaded', function() {
-    // DOM 요소 가져오기
-    const loginForm = document.getElementById('loginForm');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const togglePasswordBtn = document.getElementById('togglePassword');
-    const loginBtn = document.getElementById('loginBtn');
-    const loading = document.getElementById('loading');
-
+$(document).ready(function() {
     // 비밀번호 표시/숨김 토글
-    if (togglePasswordBtn) {
-        togglePasswordBtn.addEventListener('click', function() {
-            const type = passwordInput.type === 'password' ? 'text' : 'password';
-            passwordInput.type = type;
-            this.textContent = type === 'password' ? '👁️' : '🙈';
-        });
-    }
+    $('#togglePassword').on('click', function() {
+        const $passwordInput = $('#password');
+        const type = $passwordInput.attr('type') === 'password' ? 'text' : 'password';
+        $passwordInput.attr('type', type);
+        $(this).text(type === 'password' ? '👁️' : '🙈');
+    });
 
     // 이메일 유효성 검사 함수
     function validateEmail(email) {
@@ -29,76 +20,82 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 이메일 입력 필드 실시간 유효성 검사
-    emailInput.addEventListener('blur', function() {
-        const emailError = document.getElementById('emailError');
-        if (this.value && !validateEmail(this.value)) {
-            this.classList.add('error');
-            emailError.classList.add('show');
+    $('#email').on('blur', function() {
+        const $this = $(this);
+        const $emailError = $('#emailError');
+        const email = $this.val();
+
+        if (email && !validateEmail(email)) {
+            $this.addClass('error');
+            $emailError.addClass('show');
         } else {
-            this.classList.remove('error');
-            emailError.classList.remove('show');
+            $this.removeClass('error');
+            $emailError.removeClass('show');
         }
     });
 
     // 이메일 입력 시 에러 제거
-    emailInput.addEventListener('input', function() {
-        if (this.classList.contains('error') && validateEmail(this.value)) {
-            this.classList.remove('error');
-            document.getElementById('emailError').classList.remove('show');
+    $('#email').on('input', function() {
+        const $this = $(this);
+        if ($this.hasClass('error') && validateEmail($this.val())) {
+            $this.removeClass('error');
+            $('#emailError').removeClass('show');
         }
     });
 
     // 비밀번호 입력 시 에러 제거
-    passwordInput.addEventListener('input', function() {
-        const passwordError = document.getElementById('passwordError');
-        if (this.value.length > 0) {
-            this.classList.remove('error');
-            passwordError.classList.remove('show');
+    $('#password').on('input', function() {
+        const $this = $(this);
+        if ($this.val().length > 0) {
+            $this.removeClass('error');
+            $('#passwordError').removeClass('show');
         }
     });
 
     // 폼 제출 처리
-    loginForm.addEventListener('submit', function(e) {
+    $('#loginForm').on('submit', function(e) {
         e.preventDefault();
 
         let isValid = true;
 
         // 이메일 검증
-        if (!emailInput.value || !validateEmail(emailInput.value)) {
-            emailInput.classList.add('error');
-            document.getElementById('emailError').classList.add('show');
+        const emailValue = $('#email').val();
+        if (!emailValue || !validateEmail(emailValue)) {
+            $('#email').addClass('error');
+            $('#emailError').addClass('show');
             isValid = false;
         }
 
         // 비밀번호 검증
-        if (!passwordInput.value) {
-            passwordInput.classList.add('error');
-            document.getElementById('passwordError').classList.add('show');
+        const passwordValue = $('#password').val();
+        if (!passwordValue) {
+            $('#password').addClass('error');
+            $('#passwordError').addClass('show');
             isValid = false;
         }
 
         if (isValid) {
             // 로딩 상태 표시
-            loginBtn.style.display = 'none';
-            loading.style.display = 'block';
-            loginBtn.disabled = true;
+            $('#loginBtn').hide().prop('disabled', true);
+            $('#loading').show();
 
             // 실제 환경에서는 서버로 전송
             // 현재는 시뮬레이션 (1초 후 실제 폼 제출)
-            setTimeout(() => {
+            const form = this;
+            setTimeout(function() {
                 // 여기서 실제 폼 제출을 수행
-                this.submit();
+                form.submit();
             }, 1000);
         }
     });
 
     // Enter 키로 폼 제출
-    passwordInput.addEventListener('keypress', function(e) {
+    $('#password').on('keypress', function(e) {
         if (e.key === 'Enter') {
-            loginForm.dispatchEvent(new Event('submit'));
+            $('#loginForm').trigger('submit');
         }
     });
 
     // 페이지 로드 시 이메일 입력란에 자동 포커스
-    emailInput.focus();
+    $('#email').focus();
 });

@@ -5,14 +5,14 @@
 <mapper namespace="com.example.local_meetup.mapper.UserMapper">
 
     <!-- User 결과 매핑 -->
-    <resultMap id="UserResultMap" type="com.example.local_meetup.domain.User">
+    <!--<resultMap id="UserResultMap" type="com.example.local_meetup.domain.User">
         <id property="userId" column="USER_ID"/>
         <result property="email" column="EMAIL"/>
         <result property="password" column="PASSWORD"/>
         <result property="nickname" column="NICKNAME"/>
         <result property="region" column="REGION"/>
         <result property="createdDt" column="CREATED_DT"/>
-    </resultMap>
+    </resultMap>-->
 
     <!-- 사용자 정보 등록 -->
     <insert id="insertUser" parameterType="com.example.local_meetup.domain.User">
@@ -32,7 +32,7 @@
     </insert>
 
     <!-- 이메일로 사용자 조회 (중복 체크용) -->
-    <select id="selectUserByEmail" parameterType="string" resultMap="UserResultMap">
+    <select id="selectUserByEmail" parameterType="string">
         SELECT
             EMAIL,
             PASSWORD,

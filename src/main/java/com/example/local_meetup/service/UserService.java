@@ -18,4 +18,12 @@ public interface UserService {
      */
     boolean isEmailDuplicate(String email);
 
+    /**
+     * 로그인 인증
+     * @param email 사용자 이메일
+     * @param rawPassword 암호화되지 않은 비밀번호
+     * @return 인증 성공 시 사용자 정보, 실패 시 null
+     */
+    User authenticateUser(String email, String rawPassword);
+
 }
